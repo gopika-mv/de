@@ -1,0 +1,61 @@
+RADIOBUTTON AND RADIOGROUP – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Create a car booking form that accepts customer name and car name. Use RadioButtons to select Petrol, Diesel or Electric. Display the entered details and selected fuel type after Submit.
+
+XML IDs REQUIRED
+etCustomer, etCar, rgFuel, rbPetrol, rbDiesel, rbElectric, btnSubmit, tvResult
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    EditText etCustomer, etCar;
+    RadioGroup rgFuel;
+    Button btnSubmit;
+    TextView tvResult;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etCustomer = findViewById(R.id.etCustomer);
+        etCar = findViewById(R.id.etCar);
+        rgFuel = findViewById(R.id.rgFuel);
+        btnSubmit = findViewById(R.id.btnSubmit);
+        tvResult = findViewById(R.id.tvResult);
+
+        btnSubmit.setOnClickListener(v -> {
+            String customer = etCustomer.getText().toString().trim();
+            String car = etCar.getText().toString().trim();
+            int selectedId = rgFuel.getCheckedRadioButtonId();
+
+            if (customer.isEmpty() || car.isEmpty()) {
+                Toast.makeText(this, "Enter all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (selectedId == -1) {
+                Toast.makeText(this, "Select fuel type", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            RadioButton selected = findViewById(selectedId);
+            String fuel = selected.getText().toString();
+            tvResult.setText("Customer: " + customer + "\nCar: " + car
+                    + "\nFuel: " + fuel);
+        });
+    }
+}
+
+QUESTION 2
+Create an employee form with a RadioGroup containing Male, Female and Other. Use getCheckedRadioButtonId() to identify the selected option.

@@ -1,0 +1,33 @@
+OPTIONS MENU
+
+Purpose: Displays options such as Home, About and Exit.
+
+Create res/menu/menu_main.xml. First create a menu folder inside res.
+
+XML – res/menu/menu_main.xml
+
+Java – MainActivity.java @Override public boolean
+onCreateOptionsMenu(Menu menu) {
+getMenuInflater().inflate(R.menu.menu_main, menu); return true; }
+
+@Override public boolean onOptionsItemSelected(MenuItem item) { int id =
+item.getItemId();
+
+    if (id == R.id.home) {
+        Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
+        return true;
+    } else if (id == R.id.about) {
+        Toast.makeText(this, "About", Toast.LENGTH_SHORT).show();
+        return true;
+    } else if (id == R.id.exit) {
+        finish();
+        return true;
+    }
+
+    return super.onOptionsItemSelected(item);
+
+}
+
+Important methods: - onCreateOptionsMenu() – Creates the menu. -
+inflate() – Loads the menu XML. - onOptionsItemSelected() – Handles menu
+selection. - finish() – Closes the current Activity.

@@ -1,0 +1,22 @@
+LISTVIEW
+
+Purpose: Displays items in a vertical list.
+
+XML – activity_main.xml
+
+Java – MainActivity.java ListView listView; listView =
+findViewById(R.id.listView);
+
+String[] books = {“Java”, “Python”, “Android”};
+
+ArrayAdapter adapter = new ArrayAdapter<>( this,
+android.R.layout.simple_list_item_1, books );
+
+listView.setAdapter(adapter);
+
+listView.setOnItemClickListener((parent, view, position, id) -> { String
+book = books[position]; Toast.makeText(this, book,
+Toast.LENGTH_SHORT).show(); });
+
+Important methods: - setAdapter() – Display list data. -
+setOnItemClickListener() – Handle item selection.

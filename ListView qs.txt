@@ -1,0 +1,47 @@
+LISTVIEW – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Display book names in a ListView. When a user clicks a book, display its name in a Toast.
+
+XML ID REQUIRED
+listViewBooks
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    ListView listViewBooks;
+
+    String[] books = {
+            "Wings of Fire",
+            "The Alchemist",
+            "Atomic Habits",
+            "The Hobbit",
+            "Rich Dad Poor Dad"
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        listViewBooks = findViewById(R.id.listViewBooks);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_list_item_1, books);
+        listViewBooks.setAdapter(adapter);
+
+        listViewBooks.setOnItemClickListener((parent, view, position, id) -> {
+            Toast.makeText(this, books[position], Toast.LENGTH_SHORT).show();
+        });
+    }
+}
+
+QUESTION 2
+Display department names in a ListView. When an item is selected, show "Selected Department: " followed by the selected department name.

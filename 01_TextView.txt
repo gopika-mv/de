@@ -1,0 +1,11 @@
+TEXTVIEW
+
+Purpose: Displays text on the screen.
+
+XML – activity_main.xml
+
+Java – MainActivity.java TextView tvName; tvName =
+findViewById(R.id.tvName); tvName.setText(“Welcome”);
+
+Important methods: - setText() – Change displayed text. - getText() –
+Get displayed text.

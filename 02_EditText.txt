@@ -1,0 +1,18 @@
+EDITTEXT
+
+Purpose: Accepts input from the user.
+
+XML – activity_main.xml
+
+Common inputType values: - text - number - textPassword - phone -
+textEmailAddress - numberDecimal
+
+Java – MainActivity.java EditText etName; String name;
+
+etName = findViewById(R.id.etName); name = etName.getText().toString();
+
+if (name.isEmpty()) { etName.setError(“Enter name”); } else {
+Toast.makeText(this, name, Toast.LENGTH_SHORT).show(); }
+
+Important methods: - getText().toString() – Get user input. - setError()
+– Display validation error. - setText() – Set a value.

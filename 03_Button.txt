@@ -1,0 +1,13 @@
+BUTTON
+
+Purpose: Performs an action when clicked.
+
+XML – activity_main.xml
+
+Java – MainActivity.java Button btnSubmit; btnSubmit =
+findViewById(R.id.btnSubmit);
+
+btnSubmit.setOnClickListener(v -> { Toast.makeText(this, “Submitted”,
+Toast.LENGTH_SHORT).show(); });
+
+Important: setOnClickListener() handles button clicks.

@@ -1,0 +1,16 @@
+CHECKBOX
+
+Purpose: Allows the user to select multiple independent options.
+
+XML – activity_main.xml
+
+Java – MainActivity.java CheckBox cbJava, cbPython;
+
+cbJava = findViewById(R.id.cbJava); cbPython =
+findViewById(R.id.cbPython);
+
+if (cbJava.isChecked()) { String a = cbJava.getText().toString(); }
+
+if (cbPython.isChecked()) { String b = cbPython.getText().toString(); }
+
+Important method: isChecked() – Checks whether the checkbox is selected.

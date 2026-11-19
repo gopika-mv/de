@@ -1,0 +1,40 @@
+IMAGEVIEW – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Create a book details page that displays a book image, title and author.
+
+XML IDs REQUIRED
+ivBook, tvTitle, tvAuthor
+
+RESOURCE REQUIRED
+Place an image named book.png inside app/src/main/res/drawable/.
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    ImageView ivBook;
+    TextView tvTitle, tvAuthor;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        ivBook = findViewById(R.id.ivBook);
+        tvTitle = findViewById(R.id.tvTitle);
+        tvAuthor = findViewById(R.id.tvAuthor);
+
+        ivBook.setImageResource(R.drawable.book);
+        tvTitle.setText("Wings of Fire");
+        tvAuthor.setText("A. P. J. Abdul Kalam");
+    }
+}
+
+QUESTION 2
+Add a Change Image button. Store another image named product2.png in drawable and change the image using ivBook.setImageResource(R.drawable.product2) when clicked.

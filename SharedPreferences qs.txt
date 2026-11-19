@@ -1,0 +1,57 @@
+SHAREDPREFERENCES – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Create a Login application that saves a username using SharedPreferences. Add Save and Display buttons to store and retrieve the username.
+
+XML IDs REQUIRED
+etUsername, btnSave, btnDisplay, tvResult
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    EditText etUsername;
+    Button btnSave, btnDisplay;
+    TextView tvResult;
+    SharedPreferences preferences;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etUsername = findViewById(R.id.etUsername);
+        btnSave = findViewById(R.id.btnSave);
+        btnDisplay = findViewById(R.id.btnDisplay);
+        tvResult = findViewById(R.id.tvResult);
+
+        preferences = getSharedPreferences("MyData", MODE_PRIVATE);
+
+        btnSave.setOnClickListener(v -> {
+            String username = etUsername.getText().toString().trim();
+            if (username.isEmpty()) {
+                etUsername.setError("Enter username");
+                return;
+            }
+
+            preferences.edit().putString("username", username).apply();
+            Toast.makeText(this, "Username Saved", Toast.LENGTH_SHORT).show();
+        });
+
+        btnDisplay.setOnClickListener(v -> {
+            String savedName = preferences.getString("username", "No username saved");
+            tvResult.setText(savedName);
+        });
+    }
+}
+
+QUESTION 2
+Store a student's name and age using putString() and putInt(). Retrieve them using getString() and getInt() when the application opens again.

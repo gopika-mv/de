@@ -1,0 +1,14 @@
+TOGGLEBUTTON
+
+Purpose: Allows the user to switch between ON and OFF.
+
+XML – activity_main.xml
+
+Java – MainActivity.java ToggleButton toggleButton; toggleButton =
+findViewById(R.id.toggleButton);
+
+if (toggleButton.isChecked()) { Toast.makeText(this, “ON”,
+Toast.LENGTH_SHORT).show(); } else { Toast.makeText(this, “OFF”,
+Toast.LENGTH_SHORT).show(); }
+
+Important method: isChecked() – Checks whether the toggle is ON.

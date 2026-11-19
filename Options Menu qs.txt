@@ -1,0 +1,54 @@
+OPTIONS MENU – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Create a Library application with an Options Menu containing Home, About and Exit. About displays a message and Exit closes the current Activity.
+
+MENU RESOURCE REQUIRED
+Create res/menu/main_menu.xml with menu item IDs: home, about and exit.
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.home) {
+            Toast.makeText(this, "Home Selected", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.about) {
+            Toast.makeText(this, "Library Management Application",
+                    Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.exit) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+}
+
+QUESTION 2
+Create a Home menu item that navigates from another Activity to MainActivity using an explicit Intent.

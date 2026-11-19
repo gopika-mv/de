@@ -1,0 +1,40 @@
+TOGGLEBUTTON – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Create an application with a ToggleButton to switch a displayed status between ON and OFF. Update a TextView whenever the ToggleButton changes.
+
+XML IDs REQUIRED
+toggleButton, tvStatus
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.ToggleButton;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    ToggleButton toggleButton;
+    TextView tvStatus;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        toggleButton = findViewById(R.id.toggleButton);
+        tvStatus = findViewById(R.id.tvStatus);
+
+        toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                tvStatus.setText("Status: ON");
+            } else {
+                tvStatus.setText("Status: OFF");
+            }
+        });
+    }
+}
+
+QUESTION 2
+Create a notification settings page. Display "Notifications Enabled" when ON and "Notifications Disabled" when OFF using setOnCheckedChangeListener().

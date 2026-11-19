@@ -1,0 +1,26 @@
+CUSTOM TOAST
+
+Purpose: Displays a customized message using a separate XML layout.
+
+XML – res/layout/custom_toast.xml
+
+    <TextView
+        android:id="@+id/tvToast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:text="Welcome" />
+
+Java – MainActivity.java LayoutInflater inflater = getLayoutInflater();
+
+View layout = inflater.inflate(R.layout.custom_toast, null);
+
+TextView tv = layout.findViewById(R.id.tvToast);
+tv.setText(“Registration Successful”);
+
+Toast toast = new Toast(getApplicationContext());
+toast.setDuration(Toast.LENGTH_SHORT); toast.setView(layout);
+toast.show();
+
+This is the traditional custom Toast approach used in many lab examples.
+Newer Android versions may limit custom Toast views.

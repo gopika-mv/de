@@ -1,0 +1,33 @@
+SHAREDPREFERENCES
+
+Purpose: Stores small amounts of data so they can be retrieved later,
+even after closing the application.
+
+XML – activity_main.xml
+
+Java – MainActivity.java EditText etName; Button btnSave, btnDisplay;
+SharedPreferences sp;
+
+etName = findViewById(R.id.etName); btnSave =
+findViewById(R.id.btnSave); btnDisplay = findViewById(R.id.btnDisplay);
+
+sp = getSharedPreferences(“MyData”, MODE_PRIVATE);
+
+btnSave.setOnClickListener(v -> { String name =
+etName.getText().toString();
+
+    SharedPreferences.Editor editor = sp.edit();
+    editor.putString("username", name);
+    editor.apply();
+
+    Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+
+});
+
+btnDisplay.setOnClickListener(v -> { String name =
+sp.getString(“username”, ““); etName.setText(name); });
+
+Important methods: - getSharedPreferences() – Open preference storage. -
+edit() – Start editing. - putString() / putInt() – Store values. -
+apply() – Save changes. - getString() / getInt() – Retrieve values. -
+remove() – Remove a stored value. - clear() – Clear all stored values.

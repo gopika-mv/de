@@ -1,0 +1,50 @@
+BUTTON – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Create an application with two EditTexts to accept two numbers. Add an Add button and display their sum.
+
+XML IDs REQUIRED
+etNumber1, etNumber2, btnAdd, tvResult
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    EditText etNumber1, etNumber2;
+    Button btnAdd;
+    TextView tvResult;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etNumber1 = findViewById(R.id.etNumber1);
+        etNumber2 = findViewById(R.id.etNumber2);
+        btnAdd = findViewById(R.id.btnAdd);
+        tvResult = findViewById(R.id.tvResult);
+
+        btnAdd.setOnClickListener(v -> {
+            String first = etNumber1.getText().toString().trim();
+            String second = etNumber2.getText().toString().trim();
+
+            if (first.isEmpty() || second.isEmpty()) {
+                tvResult.setText("Enter both numbers");
+                return;
+            }
+
+            int a = Integer.parseInt(first);
+            int b = Integer.parseInt(second);
+            tvResult.setText("Sum = " + (a + b));
+        });
+    }
+}
+
+QUESTION 2
+Create Submit and Clear buttons. Submit displays the entered name. Clear empties the EditText using etName.setText("").

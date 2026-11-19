@@ -1,0 +1,25 @@
+SPINNER
+
+Purpose: Displays a dropdown list from which the user selects one
+option.
+
+XML – activity_main.xml
+
+Java – MainActivity.java Spinner spCategory; spCategory =
+findViewById(R.id.spCategory);
+
+String[] categories = {“Books”, “Electronics”, “Clothing”};
+
+ArrayAdapter adapter = new ArrayAdapter<>( this,
+android.R.layout.simple_spinner_item, categories );
+
+adapter.setDropDownViewResource(
+android.R.layout.simple_spinner_dropdown_item );
+
+spCategory.setAdapter(adapter);
+
+String selected = spCategory.getSelectedItem().toString();
+
+Important methods: - setAdapter() – Attach data to Spinner. -
+getSelectedItem() – Get selected option. - setOnItemSelectedListener() –
+Perform an action when selection changes.

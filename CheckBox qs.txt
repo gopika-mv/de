@@ -1,0 +1,54 @@
+CHECKBOX – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Create a student registration application with CheckBoxes for Java, Python, C and Android. Display all selected skills after clicking Submit.
+
+XML IDs REQUIRED
+cbJava, cbPython, cbC, cbAndroid, btnSubmit, tvResult
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    CheckBox cbJava, cbPython, cbC, cbAndroid;
+    Button btnSubmit;
+    TextView tvResult;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        cbJava = findViewById(R.id.cbJava);
+        cbPython = findViewById(R.id.cbPython);
+        cbC = findViewById(R.id.cbC);
+        cbAndroid = findViewById(R.id.cbAndroid);
+        btnSubmit = findViewById(R.id.btnSubmit);
+        tvResult = findViewById(R.id.tvResult);
+
+        btnSubmit.setOnClickListener(v -> {
+            StringBuilder skills = new StringBuilder();
+
+            if (cbJava.isChecked()) skills.append("Java, ");
+            if (cbPython.isChecked()) skills.append("Python, ");
+            if (cbC.isChecked()) skills.append("C, ");
+            if (cbAndroid.isChecked()) skills.append("Android, ");
+
+            if (skills.length() == 0) {
+                tvResult.setText("Select at least one skill");
+            } else {
+                skills.setLength(skills.length() - 2);
+                tvResult.setText("Selected Skills: " + skills);
+            }
+        });
+    }
+}
+
+QUESTION 2
+Create an event registration form with Vegetarian, Non-Vegetarian and Vegan CheckBoxes. Check each option using isChecked() and display every selected preference.

@@ -1,0 +1,29 @@
+RADIOBUTTON AND RADIOGROUP
+
+Purpose: Allows the user to select only one option from a group.
+
+XML – activity_main.xml
+
+    <RadioButton
+        android:id="@+id/rbPetrol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Petrol" />
+
+    <RadioButton
+        android:id="@+id/rbDiesel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Diesel" />
+
+Java – MainActivity.java RadioGroup rgFuel; rgFuel =
+findViewById(R.id.rgFuel);
+
+int selectedId = rgFuel.getCheckedRadioButtonId();
+
+if (selectedId == -1) { Toast.makeText(this, “Select fuel type”,
+Toast.LENGTH_SHORT).show(); } else { RadioButton rb =
+findViewById(selectedId); String fuel = rb.getText().toString(); }
+
+Important methods: - getCheckedRadioButtonId() – Get selected
+RadioButton ID. - getText().toString() – Get selected option.

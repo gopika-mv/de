@@ -1,0 +1,51 @@
+CUSTOM TOAST – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Create a Registration application. After successful registration, display a custom Toast with the message "Registration Successful" using a separate XML layout.
+
+XML RESOURCE REQUIRED
+Create res/layout/custom_toast.xml containing a TextView with ID tvToastMessage.
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    Button btnRegister;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btnRegister = findViewById(R.id.btnRegister);
+
+        btnRegister.setOnClickListener(v -> showCustomToast());
+    }
+
+    private void showCustomToast() {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast, null);
+
+        TextView message = layout.findViewById(R.id.tvToastMessage);
+        message.setText("Registration Successful");
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+}
+
+NOTE
+Traditional custom Toast views are restricted on newer Android versions. This code demonstrates the classic practical/lab implementation.
+
+QUESTION 2
+Create a Login application that displays "Welcome User" using a custom Toast after successful login. Change the message in setText() to "Welcome User".

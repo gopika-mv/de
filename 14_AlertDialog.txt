@@ -1,0 +1,20 @@
+ALERTDIALOG
+
+Purpose: Displays a confirmation or message dialog.
+
+XML – activity_main.xml
+
+Java – MainActivity.java Button btnDelete; btnDelete =
+findViewById(R.id.btnDelete);
+
+btnDelete.setOnClickListener(v -> { new
+AlertDialog.Builder(MainActivity.this) .setTitle(“Confirmation”)
+.setMessage(“Do you want to delete?”) .setPositiveButton(“Yes”, (dialog,
+which) -> { Toast.makeText(this, “Deleted”, Toast.LENGTH_SHORT).show();
+}) .setNegativeButton(“No”, null) .show(); });
+
+Import: import androidx.appcompat.app.AlertDialog;
+
+Important methods: - setTitle() – Set dialog title. - setMessage() – Set
+dialog message. - setPositiveButton() – Add positive action. -
+setNegativeButton() – Add negative action. - show() – Display dialog.

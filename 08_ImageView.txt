@@ -1,0 +1,13 @@
+IMAGEVIEW
+
+Purpose: Displays an image.
+
+XML – activity_main.xml
+
+Place book.png inside res/drawable.
+
+Java – MainActivity.java ImageView imageView; imageView =
+findViewById(R.id.imageView);
+imageView.setImageResource(R.drawable.book);
+
+Important method: setImageResource() – Changes the displayed image.

@@ -1,0 +1,83 @@
+EXPLICIT INTENT – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Create a two-page Student Registration application. The first page accepts student name and register number. On Submit, open the second page and display the entered details.
+
+MAINACTIVITY XML IDs
+etName, etRegNo, btnSubmit
+
+NEXTACTIVITY XML IDs
+tvName, tvRegNo
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    EditText etName, etRegNo;
+    Button btnSubmit;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etName = findViewById(R.id.etName);
+        etRegNo = findViewById(R.id.etRegNo);
+        btnSubmit = findViewById(R.id.btnSubmit);
+
+        btnSubmit.setOnClickListener(v -> {
+            String name = etName.getText().toString().trim();
+            String regNo = etRegNo.getText().toString().trim();
+
+            if (name.isEmpty()) {
+                etName.setError("Enter name");
+                return;
+            }
+            if (regNo.isEmpty()) {
+                etRegNo.setError("Enter register number");
+                return;
+            }
+
+            Intent intent = new Intent(MainActivity.this, NextActivity.class);
+            intent.putExtra("name", name);
+            intent.putExtra("regno", regNo);
+            startActivity(intent);
+        });
+    }
+}
+
+NEXTACTIVITY.JAVA
+package com.example.trial;
+
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class NextActivity extends AppCompatActivity {
+    TextView tvName, tvRegNo;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_next);
+
+        tvName = findViewById(R.id.tvName);
+        tvRegNo = findViewById(R.id.tvRegNo);
+
+        Intent intent = getIntent();
+        tvName.setText("Name: " + intent.getStringExtra("name"));
+        tvRegNo.setText("Register Number: " + intent.getStringExtra("regno"));
+    }
+}
+
+IMPORTANT
+Create NextActivity and register it in AndroidManifest.xml if it is not added automatically by Android Studio.
+
+QUESTION 2
+Create a two-page Library application. Send book title and author from the first Activity to the second Activity using putExtra() and retrieve them using getStringExtra().

@@ -1,0 +1,43 @@
+ALERTDIALOG – PRACTICAL QUESTIONS WITH COMPLETE JAVA CODE
+
+QUESTION 1
+Create an application with a Delete button. Show a confirmation dialog asking "Do you want to delete?". Yes displays "Deleted". No closes the dialog.
+
+XML ID REQUIRED
+btnDelete
+
+MAINACTIVITY.JAVA
+package com.example.trial;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    Button btnDelete;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btnDelete = findViewById(R.id.btnDelete);
+
+        btnDelete.setOnClickListener(v -> {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Confirm Delete")
+                    .setMessage("Do you want to delete?")
+                    .setPositiveButton("Yes", (dialog, which) ->
+                            Toast.makeText(this, "Deleted",
+                                    Toast.LENGTH_SHORT).show())
+                    .setNegativeButton("No", (dialog, which) ->
+                            dialog.dismiss())
+                    .show();
+        });
+    }
+}
+
+QUESTION 2
+Create an Exit option that asks for confirmation. In the positive button listener call finish(). In the negative button listener dismiss the dialog.

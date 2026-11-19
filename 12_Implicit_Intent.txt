@@ -1,0 +1,19 @@
+IMPLICIT INTENT
+
+Purpose: Opens another application to perform an action, such as opening
+a website or dialer.
+
+XML – activity_main.xml
+
+Java – MainActivity.java Button btnWebsite; btnWebsite =
+findViewById(R.id.btnWebsite);
+
+btnWebsite.setOnClickListener(v -> { Intent intent = new Intent(
+Intent.ACTION_VIEW, Uri.parse(“https://www.google.com”) );
+startActivity(intent); });
+
+Import: import android.net.Uri;
+
+Common actions: - Intent.ACTION_VIEW – Open website or view content. -
+Intent.ACTION_DIAL – Open dialer. - Intent.ACTION_SEND – Share text. -
+Intent.ACTION_SENDTO – Send to a specified recipient.
