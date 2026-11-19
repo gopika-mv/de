@@ -221,6 +221,12 @@ public class Next2 extends AppCompatActivity {
         tvFacilities.setText("Facilities: " + sp.getString("facilities", "None"));
         tvAvailability.setText("Availability: " + sp.getString("availability", "N/A"));
 
-        back.setOnClickListener(v -> finish());
+       back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Next2.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
     }
 }
