@@ -1,0 +1,386 @@
+================================================================================
+MOBILE APPLICATION DEVELOPMENT (MAD) PRACTICAL EXAMINATION SOLUTION
+================================================================================
+
+QUESTION:
+Develop an Android application in Java to display a list of College Departments using a Custom ArrayAdapter and ListView. When a user clicks on any department item, it should navigate to a Details Activity passing the department name, description, and department picture via an Intent. The Details Activity should display the department picture (such as a student working on a computer setup for Computer Science), department title, and detailed description. Also, implement an Options Menu in the main screen with options for "College Information" (displaying an AlertDialog) and "College Website" (launching an implicit intent to view a web page). Ensure EdgeToEdge design support is implemented.
+
+--------------------------------------------------------------------------------
+PROJECT FILE STRUCTURE:
+--------------------------------------------------------------------------------
+Secccc/
+├── app/
+│   ├── build.gradle.kts
+│   └── src/
+│       └── main/
+│           ├── java/
+│           │   └── com/
+│           │       └── example/
+│           │           └── secccc/
+│           │               ├── MainActivity.java
+│           │               ├── DetailsActivity.java
+│           │               └── DepartmentAdapter.java
+│           └── res/
+│               ├── drawable/
+│               │   ├── computer_science.png
+│               │   ├── commerce.png
+│               │   ├── mathematics.png
+│               │   └── physics.png
+│               ├── layout/
+│               │   ├── activity_main.xml
+│               │   ├── activity_details.xml
+│               │   └── department_item.xml
+│               ├── menu/
+│               │   └── main_menu.xml
+│               └── values/
+│                   ├── colors.xml
+│                   └── strings.xml
+
+--------------------------------------------------------------------------------
+INSTRUCTIONS FOR CREATING FILES IN ANDROID STUDIO:
+--------------------------------------------------------------------------------
+1. Open Android Studio and create a new Empty Views Activity project named "Secccc" with package name `com.example.secccc` using Java.
+2. Create the Java classes under `app/src/main/java/com/example/secccc/`.
+3. Create the layout XML files under `app/src/main/res/layout/`.
+4. Create the menu XML file under `app/src/main/res/menu/`.
+5. Update `strings.xml` and `colors.xml` under `app/src/main/res/values/`.
+6. Add department illustration images under `app/src/main/res/drawable/`.
+
+
+FILE 1: MainActivity.java
+Location: app/src/main/java/com/example/secccc/MainActivity.java
+--------------------------------------------------------------------------------
+package com.example.secccc;
+
+import android.os.Bundle;
+import android.content.Intent;
+import android.net.Uri;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ListView;
+import android.app.AlertDialog;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+
+    ListView listView;
+    ArrayList<String> departments;
+    ArrayList<String> details;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+                findViewById(R.id.main), (v, insets) -> {
+
+                    Insets systemBars = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars());
+
+                    v.setPadding(systemBars.left, systemBars.top,
+                            systemBars.right, systemBars.bottom);
+
+                    return insets;
+                });
+
+        listView = findViewById(R.id.listView);
+
+        departments = new ArrayList<>();
+        details = new ArrayList<>();
+
+        departments.add("Computer Science");
+        departments.add("Commerce");
+        departments.add("Mathematics");
+        departments.add("Physics");
+
+        details.add("Computer Science Department offers computer-related courses and programming studies.");
+        details.add("Commerce Department offers business and financial management courses.");
+        details.add("Mathematics Department offers advanced mathematical and analytical studies.");
+        details.add("Physics Department offers physical science and experimental physics courses.");
+
+        int[] images = {
+            R.drawable.computer_science,
+            R.drawable.commerce,
+            R.drawable.mathematics,
+            R.drawable.physics
+        };
+
+        DepartmentAdapter adapter =
+                new DepartmentAdapter(this, departments);
+
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+
+            Intent intent = new Intent(MainActivity.this,
+                    DetailsActivity.class);
+
+            intent.putExtra("name", departments.get(position));
+            intent.putExtra("details", details.get(position));
+            intent.putExtra("image", images[position]);
+
+            startActivity(intent);
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.info) {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("College Information")
+                    .setMessage("Welcome to ABC College")
+                    .setPositiveButton("OK", null)
+                    .show();
+
+            return true;
+        }
+
+        else if (id == R.id.website) {
+
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.google.com"));
+
+            startActivity(intent);
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+}
+
+
+FILE 2: DetailsActivity.java
+Location: app/src/main/java/com/example/secccc/DetailsActivity.java
+--------------------------------------------------------------------------------
+package com.example.secccc;
+
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class DetailsActivity extends AppCompatActivity {
+
+    TextView name, details;
+    ImageView imageView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_details);
+
+        ViewCompat.setOnApplyWindowInsetsListener(
+                findViewById(R.id.main), (v, insets) -> {
+
+                    Insets systemBars = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars());
+
+                    v.setPadding(systemBars.left, systemBars.top,
+                            systemBars.right, systemBars.bottom);
+
+                    return insets;
+                });
+
+        name = findViewById(R.id.txtDepartment);
+        details = findViewById(R.id.txtDetails);
+        imageView = findViewById(R.id.imgDepartment);
+
+        name.setText(getIntent().getStringExtra("name"));
+        details.setText(getIntent().getStringExtra("details"));
+
+        int imageResId = getIntent().getIntExtra("image", R.drawable.computer_science);
+        imageView.setImageResource(imageResId);
+    }
+}
+
+
+FILE 3: DepartmentAdapter.java
+Location: app/src/main/java/com/example/secccc/DepartmentAdapter.java
+--------------------------------------------------------------------------------
+package com.example.secccc;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.LayoutInflater;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+public class DepartmentAdapter extends ArrayAdapter<String> {
+
+    Context context;
+    ArrayList<String> departments;
+
+    public DepartmentAdapter(Context context,
+                             ArrayList<String> departments) {
+
+        super(context, R.layout.department_item, departments);
+
+        this.context = context;
+        this.departments = departments;
+    }
+
+    @Override
+    public View getView(int position, View convertView,
+                        ViewGroup parent) {
+
+        if (convertView == null) {
+
+            convertView = LayoutInflater.from(context)
+                    .inflate(R.layout.department_item,
+                            parent, false);
+        }
+
+        TextView name = convertView.findViewById(R.id.txtName);
+
+        name.setText(departments.get(position));
+
+        return convertView;
+    }
+}
+
+
+FILE 4: activity_main.xml
+Location: app/src/main/res/layout/activity_main.xml
+--------------------------------------------------------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="College Departments"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="15dp"/>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
+
+
+FILE 5: activity_details.xml
+Location: app/src/main/res/layout/activity_details.xml
+--------------------------------------------------------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="20dp">
+
+    <ImageView
+        android:id="@+id/imgDepartment"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="24dp"
+        android:contentDescription="@string/department_illustration"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:id="@+id/txtDepartment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:paddingTop="15dp"
+        android:gravity="center"/>
+
+</LinearLayout>
+
+
+FILE 6: department_item.xml
+Location: app/src/main/res/layout/department_item.xml
+--------------------------------------------------------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/txtName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="18sp"
+    android:padding="20dp"/>
+
+
+FILE 7: main_menu.xml
+Location: app/src/main/res/menu/main_menu.xml
+--------------------------------------------------------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/info"
+        android:title="College Information"/>
+
+    <item
+        android:id="@+id/website"
+        android:title="College Website"/>
+
+</menu>
+
+
+FILE 8: strings.xml
+Location: app/src/main/res/values/strings.xml
+--------------------------------------------------------------------------------
+<resources>
+    <string name="app_name">Secccc</string>
+    <string name="department_illustration">Department Illustration</string>
+</resources>
+
+
+FILE 9: colors.xml
+Location: app/src/main/res/values/colors.xml
+--------------------------------------------------------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

@@ -1,0 +1,508 @@
+====================================================================
+MOBILE APPLICATION DEVELOPMENT (MAD) PRACTICAL EXAMINATION SOLUTION
+Application: Library Management System (Java)
+====================================================================
+
+1. PROJECT FILE STRUCTURE:
+-------------------------
+com.example.trial/
+│
+├── java/com/example/trial/
+│   ├── MainActivity.java
+│   └── Next2.java
+│
+└── res/
+    ├── layout/
+    │   ├── activity_main.xml
+    │   └── activity_next2.xml
+    ├── menu/
+    │   └── main_menu.xml
+    └── values/
+        ├── colors.xml
+        └── strings.xml
+
+
+2. SOURCE CODE - JAVA FILES:
+----------------------------
+
+--- MainActivity.java ---
+package com.example.trial;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.*;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText bookName, author, year;
+    Spinner category;
+    TextView price;
+    RadioGroup bookType;
+    CheckBox bookmark, cover;
+    ToggleButton availability;
+    Button submit, website;
+
+    String[] categories = {"Fiction", "Science", "History"};
+    String[] prices = {"250", "400", "300"};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        bookName = findViewById(R.id.bookName);
+        author = findViewById(R.id.author);
+        year = findViewById(R.id.year);
+        category = findViewById(R.id.category);
+        price = findViewById(R.id.price);
+        bookType = findViewById(R.id.bookType);
+        bookmark = findViewById(R.id.bookmark);
+        cover = findViewById(R.id.cover);
+        availability = findViewById(R.id.availability);
+        submit = findViewById(R.id.submit);
+        website = findViewById(R.id.website);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                categories);
+
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+
+        category.setAdapter(adapter);
+
+        category.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> p,
+                                               android.view.View v, int pos, long id) {
+                        price.setText("Price: ₹" + prices[pos]);
+                    }
+                    public void onNothingSelected(AdapterView<?> p) {}
+                });
+
+        submit.setOnClickListener(v -> {
+            String b = bookName.getText().toString();
+            String a = author.getText().toString();
+            String y = year.getText().toString();
+
+            if (b.isEmpty() || a.isEmpty() || y.length() != 4) {
+                Toast.makeText(this, "Enter valid details", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int selectedId = bookType.getCheckedRadioButtonId();
+            if (selectedId == -1) {
+                Toast.makeText(this, "Select book type", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            RadioButton rb = findViewById(selectedId);
+            String type = rb.getText().toString();
+
+            SharedPreferences sp = getSharedPreferences("BookData", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+
+            editor.putString("book", b);
+            editor.putString("author", a);
+            editor.putString("year", y);
+            editor.putString("category", category.getSelectedItem().toString());
+            editor.putString("price", prices[category.getSelectedItemPosition()]);
+            editor.putString("type", type);
+            editor.putString("facilities",
+                    (bookmark.isChecked() ? "Bookmark " : "") +
+                            (cover.isChecked() ? "Cover" : "None"));
+            editor.putString("availability",
+                    availability.isChecked() ? "Available" : "Not Available");
+
+            editor.apply();
+
+            Intent i = new Intent(MainActivity.this, Next2.class);
+            startActivity(i);
+        });
+
+        website.setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com"));
+            startActivity(i);
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.about) {
+            new AlertDialog.Builder(this)
+                    .setTitle("About")
+                    .setMessage("Library Management Application")
+                    .setPositiveButton("OK", null)
+                    .show();
+            return true;
+        } else if (item.getItemId() == R.id.exit) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Exit")
+                    .setMessage("Do you want to exit?")
+                    .setNegativeButton("No", null)
+                    .setPositiveButton("Yes", (d, w) -> finish())
+                    .show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}
+
+
+--- Next2.java ---
+package com.example.trial;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.*;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class Next2 extends AppCompatActivity {
+
+    TextView tvBookName, tvAuthor, tvYear, tvCategory, tvPrice, tvType, tvFacilities, tvAvailability;
+    Button back;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_next2);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        tvBookName = findViewById(R.id.tvBookName);
+        tvAuthor = findViewById(R.id.tvAuthor);
+        tvYear = findViewById(R.id.tvYear);
+        tvCategory = findViewById(R.id.tvCategory);
+        tvPrice = findViewById(R.id.tvPrice);
+        tvType = findViewById(R.id.tvType);
+        tvFacilities = findViewById(R.id.tvFacilities);
+        tvAvailability = findViewById(R.id.tvAvailability);
+        back = findViewById(R.id.back);
+
+        SharedPreferences sp = getSharedPreferences("BookData", MODE_PRIVATE);
+
+        tvBookName.setText("Book Name: " + sp.getString("book", "N/A"));
+        tvAuthor.setText("Author: " + sp.getString("author", "N/A"));
+        tvYear.setText("Year: " + sp.getString("year", "N/A"));
+        tvCategory.setText("Category: " + sp.getString("category", "N/A"));
+        tvPrice.setText("Price: " + sp.getString("price", "N/A"));
+        tvType.setText("Type: " + sp.getString("type", "N/A"));
+        tvFacilities.setText("Facilities: " + sp.getString("facilities", "None"));
+        tvAvailability.setText("Availability: " + sp.getString("availability", "N/A"));
+
+        back.setOnClickListener(v -> finish());
+    }
+}
+
+
+3. SOURCE CODE - XML LAYOUT FILES:
+----------------------------------
+
+--- activity_main.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Library Management"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Book Name"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
+
+        <EditText
+            android:id="@+id/bookName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter book name"
+            android:paddingBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Author Name"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
+
+        <EditText
+            android:id="@+id/author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter author name"
+            android:paddingBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Publication Year"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
+
+        <EditText
+            android:id="@+id/year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter year (4 digits)"
+            android:inputType="number"
+            android:maxLength="4"
+            android:paddingBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
+
+        <Spinner
+            android:id="@+id/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp" />
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Price: ₹0"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingBottom="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Book Type"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray" />
+
+        <RadioGroup
+            android:id="@+id/bookType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="15dp">
+
+            <RadioButton
+                android:id="@+id/printed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Printed" />
+
+            <RadioButton
+                android:id="@+id/digital"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Digital"
+                android:layout_marginStart="20dp" />
+        </RadioGroup>
+
+        <CheckBox
+            android:id="@+id/bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bookmark" />
+
+        <CheckBox
+            android:id="@+id/cover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Book Cover" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Availability"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:paddingTop="10dp" />
+
+        <ToggleButton
+            android:id="@+id/availability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:textOn="Available"
+            android:textOff="Not Available" />
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit" />
+
+        <Button
+            android:id="@+id/website"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Open Website" />
+
+    </LinearLayout>
+</ScrollView>
+
+
+--- activity_next2.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Book Details"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:paddingBottom="15dp" />
+
+        <TextView
+            android:id="@+id/tvBookName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="5dp" />
+
+        <TextView
+            android:id="@+id/tvAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="5dp" />
+
+        <TextView
+            android:id="@+id/tvYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="5dp" />
+
+        <TextView
+            android:id="@+id/tvCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="5dp" />
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="5dp" />
+
+        <TextView
+            android:id="@+id/tvType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="5dp" />
+
+        <TextView
+            android:id="@+id/tvFacilities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="5dp" />
+
+        <TextView
+            android:id="@+id/tvAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:padding="5dp" />
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Back" />
+
+    </LinearLayout>
+</ScrollView>
+
+
+4. MENU & RESOURCE FILES:
+-------------------------
+
+--- main_menu.xml ---
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/about"
+        android:title="About" />
+    <item
+        android:id="@+id/exit"
+        android:title="Exit" />
+</menu>
+
+
+--- strings.xml ---
+<resources>
+    <string name="app_name">Library Management</string>
+</resources>
