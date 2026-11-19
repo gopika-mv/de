@@ -1,0 +1,226 @@
+package com.example.trial;
+
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.*;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText bookName, author, year;
+    Spinner category;
+    TextView price;
+    RadioGroup bookType;
+    CheckBox bookmark, cover;
+    ToggleButton availability;
+    Button submit, website;
+
+    String[] categories = {"Fiction", "Science", "History"};
+    String[] prices = {"250", "400", "300"};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        bookName = findViewById(R.id.bookName);
+        author = findViewById(R.id.author);
+        year = findViewById(R.id.year);
+        category = findViewById(R.id.category);
+        price = findViewById(R.id.price);
+        bookType = findViewById(R.id.bookType);
+        bookmark = findViewById(R.id.bookmark);
+        cover = findViewById(R.id.cover);
+        availability = findViewById(R.id.availability);
+        submit = findViewById(R.id.submit);
+        website = findViewById(R.id.website);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                categories);
+
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+
+        category.setAdapter(adapter);
+
+        category.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+
+                    public void onItemSelected(AdapterView<?> p,
+                                               android.view.View v, int pos, long id) {
+
+                        price.setText("Price: ₹" + prices[pos]);
+                    }
+
+                    public void onNothingSelected(AdapterView<?> p) {}
+                });
+
+        submit.setOnClickListener(v -> {
+
+            String b = bookName.getText().toString();
+            String a = author.getText().toString();
+            String y = year.getText().toString();
+
+            if (b.isEmpty() || a.isEmpty() || y.length() != 4) {
+                Toast.makeText(this,
+                        "Enter valid details",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int selectedId = bookType.getCheckedRadioButtonId();
+
+            if (selectedId == -1) {
+                Toast.makeText(this,
+                        "Select book type",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            RadioButton rb = findViewById(selectedId);
+            String type = rb.getText().toString();
+
+            SharedPreferences sp =
+                    getSharedPreferences("BookData", MODE_PRIVATE);
+
+            SharedPreferences.Editor editor = sp.edit();
+
+            editor.putString("book", b);
+            editor.putString("author", a);
+            editor.putString("year", y);
+            editor.putString("category",
+                    category.getSelectedItem().toString());
+            editor.putString("price",
+                    prices[category.getSelectedItemPosition()]);
+            editor.putString("type", type);
+            editor.putString("facilities",
+                    (bookmark.isChecked() ? "Bookmark " : "") +
+                            (cover.isChecked() ? "Cover" : "None"));
+            editor.putString("availability",
+                    availability.isChecked() ? "Available" : "Not Available");
+
+            editor.apply();
+
+            Intent i = new Intent(
+                    MainActivity.this, Next2.class);
+
+            startActivity(i);
+        });
+
+        website.setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.google.com"));
+            startActivity(i);
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.about) {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("About")
+                    .setMessage("Library Management Application")
+                    .setPositiveButton("OK", null)
+                    .show();
+
+            return true;
+
+        } else if (item.getItemId() == R.id.exit) {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Exit")
+                    .setMessage("Do you want to exit?")
+                    .setNegativeButton("No", null)
+                    .setPositiveButton("Yes",
+                            (d, w) -> finish())
+                    .show();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+}
+
+Next2.java
+
+
+package com.example.trial;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.*;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class Next2 extends AppCompatActivity {
+
+    TextView tvBookName, tvAuthor, tvYear, tvCategory, tvPrice, tvType, tvFacilities, tvAvailability;
+    Button back;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_next2);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        tvBookName = findViewById(R.id.tvBookName);
+        tvAuthor = findViewById(R.id.tvAuthor);
+        tvYear = findViewById(R.id.tvYear);
+        tvCategory = findViewById(R.id.tvCategory);
+        tvPrice = findViewById(R.id.tvPrice);
+        tvType = findViewById(R.id.tvType);
+        tvFacilities = findViewById(R.id.tvFacilities);
+        tvAvailability = findViewById(R.id.tvAvailability);
+        back = findViewById(R.id.back);
+
+        SharedPreferences sp = getSharedPreferences("BookData", MODE_PRIVATE);
+
+        tvBookName.setText("Book Name: " + sp.getString("book", "N/A"));
+        tvAuthor.setText("Author: " + sp.getString("author", "N/A"));
+        tvYear.setText("Year: " + sp.getString("year", "N/A"));
+        tvCategory.setText("Category: " + sp.getString("category", "N/A"));
+        tvPrice.setText("Price: " + sp.getString("price", "N/A"));
+        tvType.setText("Type: " + sp.getString("type", "N/A"));
+        tvFacilities.setText("Facilities: " + sp.getString("facilities", "None"));
+        tvAvailability.setText("Availability: " + sp.getString("availability", "N/A"));
+
+        back.setOnClickListener(v -> finish());
+    }
+}
